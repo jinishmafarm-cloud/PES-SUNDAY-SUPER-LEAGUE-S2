@@ -1,190 +1,351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sunday Super League — Season 2</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sunday Super League — Season 2</title>
+  <style>
+    :root {
+      --bg: #070b09;
+      --bg2: #0b1712;
+      --card: #101d16;
+      --card-2: #132419;
+      --line: rgba(237,239,234,0.08);
+      --text: #edf0eb;
+      --text-dim: #93a29a;
+      --text-faint: #5e6d66;
+      --gold: #c9a24b;
+      --cyan: #39d2c0;
+      --danger: #c1443c;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .hero {
+      padding: 40px 20px 24px;
+      background: linear-gradient(180deg, #040807, #0c1411 65%, #070b09);
+      border-bottom: 1px solid var(--line);
+    }
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(36px, 5vw, 60px);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .hero .sub {
+      display: block;
+      color: var(--gold);
+      font-size: 0.44em;
+      margin-top: 8px;
+      letter-spacing: 0.08em;
+    }
+    .hero-meta {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+    .hero-meta div {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .hero-meta .n {
+      font-weight: 700;
+      color: var(--cyan);
+      font-size: 22px;
+    }
+    .hero-meta .l {
+      color: var(--text-dim);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .section {
+      margin-top: 30px;
+    }
+    .section-head {
+      margin-bottom: 16px;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 26px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 980px) {
+      .logo-grid { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .logo-grid { grid-template-columns: 1fr; }
+    }
+    .team-card {
+      background: linear-gradient(160deg, var(--card-2), var(--card));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 120px;
+    }
+    .team-badge {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #f5f3ec;
+      border: 2px solid rgba(255,255,255,0.25);
+      box-shadow: inset 0 0 18px rgba(255,255,255,0.14);
+    }
+    .team-card .meta {
+      min-width: 0;
+    }
+    .team-card .meta .club {
+      color: var(--text-dim);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .team-card .meta .player {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .fixture-list {
+      display: grid;
+      gap: 12px;
+    }
+    .fixture-pair {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .fixture-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+    .fixture-match {
+      display: grid;
+      grid-template-columns: 1fr 120px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .fixture-match:last-child { border-bottom: none; }
+    .team-side {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .team-side.away {
+      justify-content: flex-end;
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .team-side .name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .score {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .score .box {
+      min-width: 32px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    .foot {
+      padding: 32px 0 20px;
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+  </style>
 </head>
 <body>
-<div id="root"><div class="boot">Taking the pitch…</div></div>
-<script>
-function appMain(initialState){
-  "use strict";
+  <div id="root"></div>
 
-  var CSS_TEXT = `
-    :root{ --bg:#070B09; --bg2:#0B1712; --bg-card:#101D16; --bg-card-2:#132419; --turf:#173D2A; --turf-line:rgba(233,200,115,0.08); --gold:#C9A24B; --gold-bright:#E9C873; --gold-dim:rgba(201,162,75,0.35); --cyan:#39D2C0; --cyan-dim:rgba(57,210,192,0.25); --violet:#9C8FE8; --violet-dim:rgba(156,143,232,0.25); --text:#EDEFEA; --text-dim:#93A29A; --text-faint:#5E6D66; --line:rgba(237,239,234,0.08); --danger:#C1443C; --radius:14px; }
-    *{ box-sizing:border-box; }
-    html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
-    body{ min-height:100vh; }
-    .boot{ padding:60px; text-align:center; color:var(--text-dim); font-family:'Oswald',sans-serif; letter-spacing:0.04em; }
-    .wrap{ max-width:1180px; margin:0 auto; padding:0 20px 80px; }
-    .hero{ position:relative; overflow:hidden; padding:64px 20px 46px; background:radial-gradient(ellipse 60% 50% at 20% -10%, rgba(233,200,115,0.10), transparent 60%), radial-gradient(ellipse 60% 50% at 80% -10%, rgba(57,210,192,0.08), transparent 60%), linear-gradient(180deg, #050807 0%, #0A1410 60%, var(--bg) 100%); border-bottom:1px solid var(--line); }
-    .hero-inner{ position:relative; max-width:1180px; margin:0 auto; z-index:1; }
-    .eyebrow{ display:flex; align-items:center; gap:10px; color:var(--gold-bright); font-size:13px; letter-spacing:0.02em; margin-bottom:14px; }
-    .eyebrow .dot{ width:7px; height:7px; border-radius:50%; background:var(--gold-bright); box-shadow:0 0 10px 2px var(--gold-dim); }
-    h1.title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:clamp(34px,6vw,58px); line-height:1.02; margin:0 0 10px; letter-spacing:0.005em; }
-    h1.title .sub{ display:block; color:var(--gold-bright); font-size:0.42em; font-weight:500; letter-spacing:0.06em; margin-top:8px; }
-    .hero-meta{ display:flex; flex-wrap:wrap; gap:28px; margin-top:28px; }
-    .hero-meta div{ display:flex; flex-direction:column; gap:2px; }
-    .hero-meta .n{ font-family:'Orbitron',sans-serif; font-weight:700; font-size:22px; color:var(--cyan); }
-    .hero-meta .l{ font-size:12.5px; color:var(--text-dim); }
-    .section{ padding-top:48px; }
-    .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
-    .section-head h2{ font-family:'Oswald',sans-serif; font-weight:600; font-size:24px; margin:0; }
-    .section-head p{ margin:2px 0 0; color:var(--text-dim); font-size:13.5px; }
-    .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-    @media (max-width:980px){ .stat-grid{ grid-template-columns:repeat(2,1fr); } }
-    @media (max-width:560px){ .stat-grid{ grid-template-columns:1fr; } }
-    .stat-card{ background:linear-gradient(160deg, var(--bg-card-2), var(--bg-card)); border:1px solid var(--line); border-radius:var(--radius); padding:20px; display:flex; align-items:center; gap:16px; position:relative; overflow:hidden; }
-    .stat-badge{ flex-shrink:0; }
-    .stat-body .k{ font-size:11.5px; color:var(--text-dim); margin-bottom:6px; }
-    .stat-body .team{ font-family:'Oswald',sans-serif; font-size:17px; font-weight:500; }
-    .stat-body .club{ font-size:12.5px; color:var(--text-faint); margin-bottom:6px; }
-    .stat-body .num{ font-family:'Orbitron',sans-serif; font-weight:700; font-size:24px; }
-    .badge{ border-radius:50%; display:block; }
-    .badge-sm{ width:30px; height:30px; }
-    .badge-md{ width:42px; height:42px; }
-    .badge-lg{ width:58px; height:58px; }
-    .pair-group{ background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); margin-bottom:12px; overflow:hidden; }
-    .pair-head{ padding:12px 16px; font-family:'Oswald',sans-serif; font-size:14px; color:var(--text-dim); border-bottom:1px solid var(--line); display:flex; justify-content:space-between; }
-    .leg-row{ display:flex; align-items:center; gap:14px; padding:12px 16px; border-bottom:1px solid var(--line); }
-    .leg-row:last-child{ border-bottom:none; }
-    .leg-tag{ font-size:10.5px; color:var(--text-faint); width:44px; flex-shrink:0; }
-    .leg-team{ display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
-    .leg-team span{ font-size:13.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .leg-team.away{ flex-direction:row-reverse; text-align:right; }
-    .score-box{ display:flex; align-items:center; gap:6px; }
-    .score-box input{ width:42px; text-align:center; background:var(--bg2); border:1px solid var(--line); border-radius:8px; color:var(--text); font-family:'Orbitron',sans-serif; font-size:15px; padding:6px 2px; }
-    .dash{ color:var(--text-faint); font-family:'Orbitron',sans-serif; }
-    .status-pip{ width:7px; height:7px; border-radius:50%; flex-shrink:0; background:var(--text-faint); }
-    .status-pip.played{ background:var(--cyan); box-shadow:0 0 8px var(--cyan-dim); }
-    .foot{ text-align:center; color:var(--text-faint); font-size:12px; padding:40px 20px 10px; }
-  `;
+  <script>
+    const TEAMS = [
+      { id: 0, player: 'Nirmal', club: 'Barcelona', colors: ['#A50044', '#004D98'], ini: 'FCB' },
+      { id: 1, player: 'Edwin', club: 'Bayern Munich', colors: ['#DC052D', '#0A2240'], ini: 'FCB' },
+      { id: 2, player: 'Dino', club: 'Real Madrid', colors: ['#1B2A4A', '#C9A24B'], ini: 'RMA' },
+      { id: 3, player: 'Amal', club: 'Paris Saint-Germain', colors: ['#001B5E', '#DA020E'], ini: 'PSG' },
+      { id: 4, player: 'Aman', club: 'Monaco', colors: ['#E1000F', '#0B1E3D'], ini: 'ASM' },
+      { id: 5, player: 'Prince', club: 'Borussia Dortmund', colors: ['#FDE100', '#1A1A1A'], ini: 'BVB' },
+      { id: 6, player: 'THALA', club: 'Inter Milan', colors: ['#010E80', '#1A1A1A'], ini: 'INT' },
+      { id: 7, player: 'Jinish', club: 'Manchester United', colors: ['#DA291C', '#1A1A1A'], ini: 'MUN' },
+      { id: 8, player: 'Alen T', club: 'Brazil', colors: ['#FFDF00', '#009C3B'], ini: 'BRA' },
+      { id: 9, player: 'Anil', club: 'Norway', colors: ['#EF2B2D', '#0B1E4D'], ini: 'NOR' }
+    ];
 
-  var TEAMS = [
-    {id:0, player:"Nirmal", club:"Barcelona", c1:"#A50044", c2:"#004D98", ini:"FCB"},
-    {id:1, player:"Edwin", club:"Bayern Munich", c1:"#DC052D", c2:"#0A2240", ini:"FCB"},
-    {id:2, player:"Dino", club:"Real Madrid", c1:"#1B2A4A", c2:"#C9A24B", ini:"RMA"},
-    {id:3, player:"Amal", club:"Paris Saint-Germain", c1:"#001B5E", c2:"#DA020E", ini:"PSG"},
-    {id:4, player:"Aman", club:"Monaco", c1:"#E1000F", c2:"#0B1E3D", ini:"ASM"},
-    {id:5, player:"Prince", club:"Borussia Dortmund", c1:"#FDE100", c2:"#1A1A1A", ini:"BVB"},
-    {id:6, player:"THALA", club:"Inter Milan", c1:"#010E80", c2:"#1A1A1A", ini:"INT"},
-    {id:7, player:"Jinish", club:"Manchester United", c1:"#DA291C", c2:"#1A1A1A", ini:"MUN"},
-    {id:8, player:"Alen T", club:"Brazil", c1:"#FFDF00", c2:"#009C3B", ini:"BRA"},
-    {id:9, player:"Anil", club:"Norway", c1:"#EF2B2D", c2:"#0B1E4D", ini:"NOR"}
-  ];
+    function buildCompletedFixtures() {
+      const fixtures = [];
+      let id = 0;
+      for (let i = 0; i < TEAMS.length; i++) {
+        for (let j = i + 1; j < TEAMS.length; j++) {
+          const leg1Home = i;
+          const leg1Away = j;
+          const leg2Home = j;
+          const leg2Away = i;
 
-  function genFixtures(){
-    var f = [], id = 0;
-    for(var i=0;i<TEAMS.length;i++){
-      for(var j=i+1;j<TEAMS.length;j++){
-        f.push({id:id++, home:i, away:j, leg:1, hs:null, as:null});
-        f.push({id:id++, home:j, away:i, leg:2, hs:null, as:null});
+          const hs1 = 1 + ((i * 5 + j * 3 + 1) % 4);
+          const as1 = 1 + ((j * 4 + i * 2 + 2) % 4);
+          const hs2 = 1 + ((j * 5 + i * 3 + 2) % 4);
+          const as2 = 1 + ((i * 4 + j * 2 + 1) % 4);
+
+          fixtures.push({ id: id++, home: leg1Home, away: leg1Away, leg: 1, hs: hs1, as: as1 });
+          fixtures.push({ id: id++, home: leg2Home, away: leg2Away, leg: 2, hs: hs2, as: as2 });
+        }
       }
+      return fixtures;
     }
-    return f;
-  }
 
-  function buildCompletedFixtures(){
-    var f = genFixtures();
-    f.forEach(function(m){
-      var h = m.home, a = m.away, leg = m.leg;
-      var hs = 1 + ((h * 5 + a * 3 + (leg === 1 ? 1 : 2)) % 4);
-      var as = 1 + ((a * 4 + h * 2 + (leg === 1 ? 2 : 1)) % 4);
-      if(hs === as){
-        hs += 1;
-        if(hs > 4){ hs = 2; }
-      }
-      m.hs = hs;
-      m.as = as;
-    });
-    return f;
-  }
+    const FIXTURES = buildCompletedFixtures();
 
-  function team(id){ return TEAMS[id]; }
+    function badge(team) {
+      const grad = "linear-gradient(135deg, " + team.colors[0] + ", " + team.colors[1] + ")";
+      return '<div class="team-badge" style="background:' + grad + ';">' + team.ini + '</div>';
+    }
 
-  function esc(s){ return String(s).replace(/[&<>\"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+    function render() {
+      const root = document.getElementById('root');
 
-  function badgeSVG(t, size){
-    size = size || 42;
-    var gid = "g"+t.id;
-    return '<svg class="badge" width="'+size+'" height="'+size+'" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="'+esc(t.club)+' logo">'
-      + '<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="'+t.c1+'"/><stop offset="100%" stop-color="'+t.c2+'"/></linearGradient></defs>'
-      + '<circle cx="32" cy="32" r="30" fill="url(#'+gid+')" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>'
-      + '<text x="32" y="38" text-anchor="middle" font-family="Oswald, sans-serif" font-weight="700" font-size="17" fill="#F5F3EC" style="letter-spacing:0.7px">'+t.ini+'</text>'
-      + '</svg>';
-  }
+      const logoHtml = TEAMS.map(team => `
+        <div class="team-card">
+          ${badge(team)}
+          <div class="meta">
+            <div class="club">${team.club}</div>
+            <div class="player">${team.player}</div>
+          </div>
+        </div>
+      `).join('');
 
-  var state = initialState && initialState.fixtures ? initialState : {fixtures:buildCompletedFixtures(), activeTab:"standings", search:""};
-
-  function computeStandings(){
-    var rows = TEAMS.map(function(t){ return {id:t.id, p:0, w:0, d:0, l:0, gf:0, ga:0, pts:0}; });
-    state.fixtures.forEach(function(m){
-      if(m.hs===null || m.as===null || m.hs==="" || m.as==="") return;
-      var hs = Number(m.hs), as = Number(m.as);
-      var H = rows[m.home], A = rows[m.away];
-      H.p++; A.p++; H.gf+=hs; H.ga+=as; A.gf+=as; A.ga+=hs;
-      if(hs>as){ H.w++; H.pts+=3; A.l++; }
-      else if(hs<as){ A.w++; A.pts+=3; H.l++; }
-      else { H.d++; A.d++; H.pts++; A.pts++; }
-    });
-    rows.forEach(function(r){ r.gd = r.gf-r.ga; });
-    rows.sort(function(a,b){ return b.pts-a.pts || b.gd-a.gd || b.gf-a.gf || a.id-b.id; });
-    return rows;
-  }
-
-  function render(){
-    var root = document.getElementById("root");
-    var rows = computeStandings();
-    var totalPlayed = state.fixtures.filter(function(m){ return m.hs!==null && m.hs!=="" && m.as!==null && m.as!==""; }).length;
-    var allComplete = state.fixtures.every(function(m){ return m.hs!==null && m.hs!=="" && m.as!==null && m.as!==""; });
-
-    var html = '';
-    html += '<div class="hero"><div class="hero-inner"><div class="eyebrow"><span class="dot"></span> Season 2 · Sunday League</div><h1 class="title">Sunday Super League<span class="sub">Ten managers. Double round robin. One trophy.</span></h1><div class="hero-meta"><div><span class="n">'+TEAMS.length+'</span><span class="l">Teams</span></div><div><span class="n">'+state.fixtures.length+'</span><span class="l">Total fixtures</span></div><div><span class="n">'+totalPlayed+'</span><span class="l">Played</span></div><div><span class="n">4</span><span class="l">Qualify to semis</span></div></div></div></div>';
-    html += '<div class="wrap">';
-
-    html += '<div class="section"><div class="section-head"><div><h2>All team logos</h2><p>Every club in the league</p></div></div><div class="stat-grid">';
-    TEAMS.forEach(function(t){
-      html += '<div class="stat-card"><div class="stat-badge">'+badgeSVG(t,58)+'</div><div class="stat-body"><div class="k">'+esc(t.club)+'</div><div class="team">'+esc(t.player)+'</div><div class="club">'+esc(t.club)+'</div><div class="num" style="font-size:18px;">'+esc(t.ini)+'</div></div></div>';
-    });
-    html += '</div></div>';
-
-    html += '<div class="section"><div class="section-head"><div><h2>All fixtures</h2><p>Every round of the season</p></div></div>';
-    var map = {};
-    state.fixtures.forEach(function(m){
-      var a = Math.min(m.home,m.away), b = Math.max(m.home,m.away);
-      var key = a + '-' + b;
-      if(!map[key]) map[key] = [];
-      map[key].push(m);
-    });
-    Object.keys(map).forEach(function(key){
-      var pair = key.split('-');
-      var t1 = team(Number(pair[0])), t2 = team(Number(pair[1]));
-      var matches = map[key].sort(function(a,b){ return a.leg-b.leg; });
-      html += '<div class="pair-group"><div class="pair-head"><span>'+esc(t1.player)+' vs '+esc(t2.player)+'</span><span>'+esc(t1.club)+' · '+esc(t2.club)+'</span></div>';
-      matches.forEach(function(m){
-        var ht = team(m.home), at = team(m.away), played = m.hs!==null && m.hs!=="" && m.as!==null && m.as!=="";
-        html += '<div class="leg-row"><span class="status-pip '+(played?'played':'')+'"></span><span class="leg-tag">Leg '+m.leg+'</span><div class="leg-team home">'+badgeSVG(ht,30)+'<span>'+esc(ht.player)+'</span></div><div class="score-box"><input type="number" min="0" max="99" inputmode="numeric" value="'+(m.hs===null?'':m.hs)+'"><span class="dash">–</span><input type="number" min="0" max="99" inputmode="numeric" value="'+(m.as===null?'':m.as)+'"></div><div class="leg-team away">'+badgeSVG(at,30)+'<span>'+esc(at.player)+'</span></div></div>';
+      const pairMap = {};
+      FIXTURES.forEach(f => {
+        const key = [Math.min(f.home, f.away), Math.max(f.home, f.away)].join('-');
+        if (!pairMap[key]) pairMap[key] = [];
+        pairMap[key].push(f);
       });
-      html += '</div>';
-    });
-    html += '</div>';
 
-    html += '<div class="foot">Sunday Super League · Season 2</div>';
-    html += '</div>';
-    root.innerHTML = html;
-  }
+      const fixtureHtml = Object.keys(pairMap).map(key => {
+        const [a, b] = key.split('-').map(Number);
+        const t1 = TEAMS[a];
+        const t2 = TEAMS[b];
+        const matches = pairMap[key].sort((x, y) => x.leg - y.leg);
 
-  var styleEl = document.createElement("style");
-  styleEl.textContent = CSS_TEXT;
-  document.head.appendChild(styleEl);
-  render();
-}
+        return `
+          <div class="fixture-pair">
+            <div class="fixture-header">
+              <span>${t1.player} vs ${t2.player}</span>
+              <span>${t1.club} · ${t2.club}</span>
+            </div>
+            ${matches.map(match => {
+              const homeTeam = TEAMS[match.home];
+              const awayTeam = TEAMS[match.away];
+              return `
+                <div class="fixture-match">
+                  <div class="team-side home">
+                    ${badge(homeTeam)}
+                    <div class="name">${homeTeam.player}</div>
+                  </div>
+                  <div class="score">
+                    <span class="box">${match.hs}</span>
+                    <span>:</span>
+                    <span class="box">${match.as}</span>
+                  </div>
+                  <div class="team-side away">
+                    ${badge(awayTeam)}
+                    <div class="name">${awayTeam.player}</div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }).join('');
 
-appMain({fixtures: buildCompletedFixtures()});
-</script>
+      root.innerHTML = `
+        <div class="hero">
+          <div class="wrap">
+            <h1>Sunday Super League <span class="sub">Season 2</span></h1>
+            <div class="hero-meta">
+              <div><span class="n">${TEAMS.length}</span><span class="l">Teams</span></div>
+              <div><span class="n">${FIXTURES.length}</span><span class="l">Fixtures</span></div>
+              <div><span class="n">${FIXTURES.filter(f => f.hs !== null).length}</span><span class="l">Played</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wrap">
+          <section class="section">
+            <div class="section-head">
+              <h2>All team logos</h2>
+              <p>Every club in the league</p>
+            </div>
+            <div class="logo-grid">${logoHtml}</div>
+          </section>
+
+          <section class="section">
+            <div class="section-head">
+              <h2>All fixtures</h2>
+              <p>Full results for the season</p>
+            </div>
+            <div class="fixture-list">${fixtureHtml}</div>
+          </section>
+
+          <div class="foot">Sunday Super League · Season 2</div>
+        </div>
+      `;
+    }
+
+    render();
+  </script>
 </body>
 </html>
